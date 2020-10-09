@@ -1,15 +1,15 @@
-export class ContainerItem {
-    private readonly _object: any;
+export class ContainerItem<T> {
+    private readonly _object: T;
     private readonly _name: Symbol;
     private readonly _tags: string[];
 
-    constructor(object: any, name: Symbol, tags: string[]) {
+    constructor(object: T, name: Symbol, tags: string[]) {
         this._object = object;
         this._name = name;
         this._tags = tags;
     }
 
-    get object(): any {
+    get object(): T {
         return this._object;
     }
 
