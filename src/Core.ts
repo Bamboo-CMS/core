@@ -1,6 +1,5 @@
 import {Container} from "./container/Container";
-import {ResolverContainer} from "./resolverModule/ResolverContainer";
-import {PackageContainer} from "./packageModule/PackageContainer";
+import {packageHandlerContainerTags, packageHandlerContainerName, PackageHandler} from "./packageModule/PackageHandler";
 
 class Core {
     private readonly _container: Container;
@@ -9,9 +8,8 @@ class Core {
     constructor(container: Container) {
         this._container = container;
 
-        // Register core required containers.
-        this.container.register(new ResolverContainer(), ResolverContainer.getName(), ['container']);
-        this.container.register(new PackageContainer(), PackageContainer.getName(), ['container']);
+        // Register core required handlers.
+        this.container.register(new PackageHandler(), packageHandlerContainerName, packageHandlerContainerTags);
     }
 
     boot() {
@@ -19,12 +17,10 @@ class Core {
             return;
         }
 
-        this._booted = true;
-
         // Initialize registered packages.
-        this._container.get(ResolverContainer.getName()).initializesPackages();
+        this._container.get(packageHandlerContainerName).initializesPackages();
 
-        //
+        this._booted = true;
     }
 
     get container(): Container {

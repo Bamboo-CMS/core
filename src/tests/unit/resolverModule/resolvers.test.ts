@@ -1,4 +1,4 @@
-import {ResolverContainer} from "../../../resolverModule/ResolverContainer";
+import {ResolverHandler} from "../../../resolverModule/ResolverHandler";
 import {IResolvers} from "graphql-tools";
 
 describe('Resolver tests', () => {
@@ -29,7 +29,7 @@ describe('Resolver tests', () => {
             }
         };
 
-        const resolverContainer = new ResolverContainer();
+        const resolverContainer = new ResolverHandler();
 
         // Test if there is an empty result.
         expect(resolverContainer.getResolverMap() === null).toBeTruthy();

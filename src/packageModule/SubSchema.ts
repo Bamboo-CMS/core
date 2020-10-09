@@ -1,18 +1,17 @@
-import {ISubSchema} from "./ISubSchema";
 import {GraphQLSchema} from "graphql";
 
-export class SubSchema implements ISubSchema {
-    schema: GraphQLSchema;
+export class SubSchema {
+    private _schema: GraphQLSchema;
 
     constructor(schema: GraphQLSchema) {
-        this.schema = schema;
+        this._schema = schema;
     }
 
-    getSchema():GraphQLSchema {
-        return this.schema;
+    get schema(): GraphQLSchema {
+        return this._schema;
     }
 
-    setSchema(schema: GraphQLSchema) {
-        this.schema = schema;
+    set schema(value: GraphQLSchema) {
+        this._schema = value;
     }
 }

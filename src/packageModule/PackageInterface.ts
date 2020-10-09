@@ -1,9 +1,7 @@
-import {IPackageContainer} from "./IPackageContainer";
-
-export interface IPackage {
+export interface PackageInterface {
     /**
      * Function the core trigger if the project get initialized.
      * Register your resolvers, schemas etc. in this method.
      */
-    start(packageContainer: IPackageContainer): void;
+    start(): void;
 }

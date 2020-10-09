@@ -1,6 +1,8 @@
+import { ContainerItem } from "./ContainerItem";
 export declare class Container {
-    private readonly _containerItems;
-    register(object: any, name: Symbol, tags?: string[]): void;
+    protected readonly _containerItems: ContainerItem[];
+    register(object: any, name: Symbol, tags: string[]): void;
     get(name: Symbol): any | null;
-    getByTag(tag: string): any[];
+    getByTags(tags: string[]): any[];
+    unregister(name: Symbol): void;
 }
