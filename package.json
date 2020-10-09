@@ -7,12 +7,20 @@
   "scripts": {
     "start": "node 'dist/server.js'",
     "build": "tsc -d",
+    "prepublish": "npm run build",
     "start:dev": "npm run build:dev",
     "build:dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC",
+  "license": "MIT",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/Bamboo-CMS/core.git"
+  },
   "peerDependencies": {
     "graphql": "14.5.8",
     "graphql-tools": "^6.0.18",

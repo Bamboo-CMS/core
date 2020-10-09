@@ -18,7 +18,7 @@ class Core {
         }
 
         // Initialize registered packages.
-        this._container.get(packageHandlerContainerName).initializesPackages();
+        this._container.get<PackageHandler>(packageHandlerContainerName)?.initializesPackages();
 
         this._booted = true;
 

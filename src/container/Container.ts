@@ -3,7 +3,7 @@ import {ContainerItem} from "./ContainerItem";
 export class Container {
     protected readonly _containerItems: ContainerItem<any>[] = [];
 
-    public register(object: any, name: Symbol, tags: string[]): void {
+    public register<T>(object: T, name: Symbol, tags: string[] = []): void {
         // Emit if there's an object with the same name.
         const existingObject = this.get(name);
 
@@ -19,13 +19,13 @@ export class Container {
         this._containerItems.push(new ContainerItem(object, name, tags));
     }
 
-    public get(name: Symbol): any | null {
+    public get<T>(name: Symbol): T | null {
         const item = this._containerItems.find(item => item.name === name);
 
         return item ? item.object : null;
     }
 
-    public getByTags(tags: string[]): any[] {
+    public getByTags<T>(tags: string[]): T[] {
         const items = this._containerItems.filter(item => item.tags.some((itemTag: string) => tags.some((subTag: string) => itemTag === subTag)));
 
         return items.map(item => item.object);
