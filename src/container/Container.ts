@@ -1,18 +1,18 @@
 import {ContainerItem} from "./ContainerItem";
 
 export class Container {
-    protected readonly _containerItems: ContainerItem[] = [];
+    protected readonly _containerItems: ContainerItem<any>[] = [];
 
-    public register(object: any, name: Symbol, tags: string[]): void {
+    public register<T>(object: T, name: Symbol, tags: string[]): void {
         this._containerItems.push(new ContainerItem(object, name, tags));
     }
 
-    public get(name: Symbol): any|null {
-        return this._containerItems.find(item => item.name === name);
+    public get<T>(name: Symbol): T | null {
+        return this._containerItems.find(item => item.name === name)?.object;
     }
 
-    public getByTags(tags: string[]): any[] {
-        const items = this._containerItems.filter(item => item.tags.some(itemTag => tags.some(subTag => itemTag === subTag)));
+    public getByTags<T>(tags: string[]): T[] {
+        const items = this._containerItems.filter(item => item.tags.some((itemTag: string) => tags.some(subTag => itemTag === subTag)));
 
         return items.map(item => item.object);
     }
