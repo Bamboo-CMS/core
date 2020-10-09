@@ -1,0 +1,43 @@
+{
+  "name": "core-package",
+  "version": "1.0.0",
+  "description": "",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "scripts": {
+    "start": "node 'dist/server.js'",
+    "build": "tsc -d",
+    "start:dev": "npm run build:dev",
+    "build:dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "peerDependencies": {
+    "graphql": "14.5.8",
+    "graphql-tools": "^6.0.18",
+    "@types/graphql": "14.0.7",
+    "@types/mongoose": "^5.7.36"
+  },
+  "devDependencies": {
+    "@graphql-tools/schema": "^6.0.18",
+    "@types/jest": "^26.0.4",
+    "@types/lodash.merge": "^4.6.6",
+    "@types/mongoose": "^5.7.36",
+    "@types/node": "^14.0.5",
+    "graphql": "14.5.8",
+    "graphql-tools": "^6.0.18",
+    "jest": "^26.1.0",
+    "lodash": "^4.17.20",
+    "lodash.merge": "^4.6.2",
+    "lodash.union": "^4.6.0",
+    "ncp": "2.0.0",
+    "ts-jest": "^26.1.1",
+    "ts-node-dev": "^1.0.0-pre.50",
+    "tslint": "^6.1.2",
+    "typescript": "^3.9.3"
+  },
+  "files": [
+    "lib/**/*"
+  ]
+}
