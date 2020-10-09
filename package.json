@@ -1,5 +1,5 @@
 {
-  "name": "@bamboo/core-package",
+  "name": "@bamboo/core",
   "version": "1.0.0",
   "description": "",
   "main": "./lib/index.js",
