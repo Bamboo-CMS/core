@@ -8,7 +8,7 @@ export declare class PackageHandler {
     private readonly defaultPackageContainerTag;
     private readonly defaultResolverContainerTag;
     private readonly defaultGraphQLSchemaContainerTag;
-    private packagesInitialized;
+    private _packagesInitialized;
     initializesPackages(): void;
     registerPackage(bambooPackage: Package, name: Symbol, tags?: string[]): void;
     addResolver(resolver: IResolvers, name: Symbol, tags?: string[]): void;

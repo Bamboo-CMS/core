@@ -25,10 +25,10 @@ export class PackageHandler {
      */
     private readonly defaultGraphQLSchemaContainerTag: string = 'graphQLSchema';
 
-    private packagesInitialized: boolean = false;
+    private _packagesInitialized: boolean = false;
 
     initializesPackages(): void {
-        if (this.packagesInitialized) {
+        if (this._packagesInitialized) {
             return;
         }
 
@@ -42,7 +42,7 @@ export class PackageHandler {
             bambooPackage.start();
         }
 
-        this.packagesInitialized = true;
+        this._packagesInitialized = true;
     }
 
     registerPackage(bambooPackage: Package, name: Symbol, tags: string[] = []): void {

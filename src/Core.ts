@@ -12,15 +12,17 @@ class Core {
         this.container.register(new PackageHandler(), packageHandlerContainerName, packageHandlerContainerTags);
     }
 
-    boot() {
+    boot(): boolean {
         if (this._booted) {
-            return;
+            return false;
         }
 
         // Initialize registered packages.
         this._container.get(packageHandlerContainerName).initializesPackages();
 
         this._booted = true;
+
+        return this._booted;
     }
 
     get container(): Container {
