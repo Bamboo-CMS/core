@@ -1,4 +1,4 @@
-import {PackageInterface} from "./PackageInterface";
+import {Package} from "./Package";
 import {IResolvers} from 'graphql-tools';
 import {GraphQLSchema} from "graphql";
 import {SubSchema} from "./SubSchema";
@@ -32,6 +32,12 @@ export class PackageHandler {
             return;
         }
 
+        // Register each package.
+        for (let bambooPackage of this.packages) {
+            bambooPackage.register();
+        }
+
+        // Start each package.
         for (let bambooPackage of this.packages) {
             bambooPackage.start();
         }
@@ -39,7 +45,7 @@ export class PackageHandler {
         this.packagesInitialized = true;
     }
 
-    registerPackage(bambooPackage: PackageInterface, name: Symbol, tags: string[] = []): void {
+    registerPackage(bambooPackage: Package, name: Symbol, tags: string[] = []): void {
         core.container.register(bambooPackage, name, [
             ...tags,
             ...[this.defaultPackageContainerTag]
@@ -85,7 +91,7 @@ export class PackageHandler {
         return core.container.getByTags([this.defaultResolverContainerTag]);
     }
 
-    get packages(): PackageInterface[] {
+    get packages(): Package[] {
         return core.container.getByTags([this.defaultPackageContainerTag]);
     }
 }
