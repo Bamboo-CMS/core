@@ -28,6 +28,10 @@ class Core {
     get container(): Container {
         return this._container;
     }
+
+    get packageHandler(): PackageHandler|null {
+        return this._container.get<PackageHandler>(packageHandlerContainerName);
+    }
 }
 
 const _core = new Core(new Container());
