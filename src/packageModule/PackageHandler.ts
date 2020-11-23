@@ -2,7 +2,7 @@ import {Package} from "./Package";
 import {IResolvers} from 'graphql-tools';
 import {GraphQLSchema} from "graphql";
 import {SubSchema} from "./SubSchema";
-import {core} from "../Core";
+import { core } from "../Core";
 import merge from "lodash.merge";
 
 export const packageHandlerContainerName = Symbol('packageHandler');
@@ -48,7 +48,7 @@ export class PackageHandler {
     registerPackage(bambooPackage: Package, name: Symbol, tags: string[] = []): void {
         core.container.register(bambooPackage, name, [
             ...tags,
-            ...[this.defaultPackageContainerTag]
+            this.defaultPackageContainerTag
         ]);
     }
 

@@ -1,7 +1,7 @@
 import {Container} from "./container/Container";
 import {packageHandlerContainerTags, packageHandlerContainerName, PackageHandler} from "./packageModule/PackageHandler";
 
-class Core {
+export class Core {
     private readonly _container: Container;
     private _booted: boolean = false;
 
@@ -29,11 +29,9 @@ class Core {
         return this._container;
     }
 
-    get packageHandler(): PackageHandler|null {
-        return this._container.get<PackageHandler>(packageHandlerContainerName);
+    get packageHandler(): PackageHandler {
+        return this._container.get<PackageHandler>(packageHandlerContainerName) as PackageHandler;
     }
 }
 
-const _core = new Core(new Container());
-
-export const core = _core;
+export const core = new Core(new Container());

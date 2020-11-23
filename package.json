@@ -1,6 +1,6 @@
 {
   "name": "@bamboo-cms/core",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "description": "",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -27,6 +27,11 @@
     "@types/graphql": "14.0.7",
     "@types/mongoose": "^5.7.36"
   },
+  "dependencies": {
+    "lodash": "^4.17.20",
+    "lodash.merge": "^4.6.2",
+    "lodash.union": "^4.6.0"
+  },
   "devDependencies": {
     "@graphql-tools/schema": "^6.0.18",
     "@types/jest": "^26.0.4",
@@ -36,9 +41,6 @@
     "graphql": "14.5.8",
     "graphql-tools": "^6.0.18",
     "jest": "^26.1.0",
-    "lodash": "^4.17.20",
-    "lodash.merge": "^4.6.2",
-    "lodash.union": "^4.6.0",
     "ncp": "2.0.0",
     "ts-jest": "^26.1.1",
     "ts-node-dev": "^1.0.0-pre.50",
