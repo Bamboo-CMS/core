@@ -1,9 +1,9 @@
 import {Package} from "./Package";
-import {IResolvers} from 'graphql-tools';
+import {IResolvers, mergeSchemas} from 'graphql-tools';
 import {GraphQLSchema} from "graphql";
-import {SubSchema} from "./SubSchema";
 import { core } from "../Core";
 import merge from "lodash.merge";
+import { IExecutableSchemaDefinition, makeExecutableSchema } from '@graphql-tools/schema';
 
 export const packageHandlerContainerName = Symbol('packageHandler');
 export const packageHandlerContainerTags: string[] = ['packageHandler'];
@@ -21,7 +21,7 @@ export class PackageHandler {
     private readonly defaultResolverContainerTag: string = 'resolver';
 
     /**
-     * The graphql tag is required to find all graphql schema entries.
+     * The graphql tag is required to find all graphql schemas entries.
      */
     private readonly defaultGraphQLSchemaContainerTag: string = 'graphQLSchema';
 
@@ -59,28 +59,26 @@ export class PackageHandler {
         ]);
     }
 
-    addGraphQLSchema(graphQLSchema: GraphQLSchema, name: Symbol, tags: string[] = []): void {
-        core.container.register(graphQLSchema, name, [
+    addGraphQLSchemaDefinition(graphQLSchemaDefinition: IExecutableSchemaDefinition, name: Symbol, tags: string[] = []): void {
+        core.container.register(makeExecutableSchema(graphQLSchemaDefinition), name, [
             ...tags,
             ...[this.defaultGraphQLSchemaContainerTag]
         ]);
     }
 
-    getResolverMap(): IResolvers | null {
+    private getResolverMap(): IResolvers | undefined {
         if (this.resolvers.length <= 0) {
-            return null;
+            return undefined;
         }
 
-        // Merge the resolvers.
-        const mergedResolvers = {};
-
-        this.resolvers.forEach(resolver => merge(mergedResolvers, resolver));
-
-        return mergedResolvers;
+        return this.resolvers.reduce((curr, resolver) => merge(curr, resolver), {});
     }
 
-    getSubSchemas(): SubSchema[] {
-        return this.graphQLSchemas.map(schema => new SubSchema(schema));
+    getMergedSchema(): GraphQLSchema {
+        return mergeSchemas({
+            schemas: this.graphQLSchemas,
+            resolvers: this.getResolverMap()
+        })
     }
 
     get graphQLSchemas(): GraphQLSchema[] {

@@ -1,3 +1,6 @@
 .idea
 src
 jest.config.js
+.yalc
+tsconfig.json
+yalc.lock

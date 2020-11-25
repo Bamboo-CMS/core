@@ -1,4 +1,4 @@
-import {ResolverHandler} from "../../../resolverModule/ResolverHandler";
+import {PackageHandler} from "../../../packageModule/PackageHandler";
 import {IResolvers} from "graphql-tools";
 
 describe('Resolver tests', () => {
@@ -29,16 +29,16 @@ describe('Resolver tests', () => {
             }
         };
 
-        const resolverContainer = new ResolverHandler();
+        const packageHandler = new PackageHandler();
 
         // Test if there is an empty result.
-        expect(resolverContainer.getResolverMap() === null).toBeTruthy();
+        expect(packageHandler.getMergedSchema() === null).toBeTruthy();
 
         // Register all resolvers.
-        resolverContainer.register(firstResolverMock);
-        resolverContainer.register(secondResolverMock);
+        packageHandler.addResolver(firstResolverMock, Symbol());
+        packageHandler.addResolver(secondResolverMock, Symbol());
 
-        const resolverMap: any = resolverContainer.getResolverMap();
+        const resolverMap: any = packageHandler.getMergedSchema();
 
         // Test if the two resolvers are merged.
         expect(typeof resolverMap).toBe('object');

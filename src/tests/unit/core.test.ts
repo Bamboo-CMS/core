@@ -4,7 +4,7 @@ import {
     PackageHandler,
     packageHandlerContainerName,
     packageHandlerContainerTags
-} from "../../packageModule/PackageHandler";
+} from '../..';
 
 describe('Core tests', () => {
     it('should instance the core correctly', async () => {
