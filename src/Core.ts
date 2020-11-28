@@ -18,7 +18,8 @@ export class Core {
         }
 
         // Initialize registered packages.
-        this._container.get<PackageHandler>(packageHandlerContainerName)?.initializesPackages();
+        this.packageHandler.initializesPackages();
+        this.packageHandler.addGraphQLSchemaDefinition({  })
 
         this._booted = true;
 

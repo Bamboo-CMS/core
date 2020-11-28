@@ -4,9 +4,13 @@ import {GraphQLSchema} from "graphql";
 import { core } from "../Core";
 import merge from "lodash.merge";
 import { IExecutableSchemaDefinition, makeExecutableSchema } from '@graphql-tools/schema';
+import PermissionInterface from '../authorizationModule/PermissionInterface';
+import { RoleInterface } from '../authorizationModule/RoleInterface';
 
 export const packageHandlerContainerName = Symbol('packageHandler');
 export const packageHandlerContainerTags: string[] = ['packageHandler'];
+
+type PermissionMap = { [k: string]: PermissionInterface };
 
 export class PackageHandler {
 
@@ -26,6 +30,10 @@ export class PackageHandler {
     private readonly defaultGraphQLSchemaContainerTag: string = 'graphQLSchema';
 
     private _packagesInitialized: boolean = false;
+
+    private _permissions: PermissionMap = {};
+
+    private _roles: RoleInterface[] = [];
 
     initializesPackages(): void {
         if (this._packagesInitialized) {
@@ -81,6 +89,22 @@ export class PackageHandler {
         })
     }
 
+    addPermissions(permissions: PermissionInterface[]) {
+        const pObject: PermissionMap = {};
+        for (const p of permissions) {
+            pObject[p.permission] = p;
+        }
+
+        this._permissions = {
+            ...this._permissions,
+            ...pObject
+        };
+    }
+
+    addRole(role: RoleInterface) {
+        this._roles.push(role);
+    }
+
     get graphQLSchemas(): GraphQLSchema[] {
         return core.container.getByTags([this.defaultGraphQLSchemaContainerTag]);
     }
@@ -91,5 +115,17 @@ export class PackageHandler {
 
     get packages(): Package[] {
         return core.container.getByTags([this.defaultPackageContainerTag]);
+    }
+
+    get permissions(): PermissionInterface[] {
+        return Object.values(this._permissions);
+    }
+
+    getPermissionByName(permission: string): PermissionInterface | null {
+        return this._permissions[permission] || null;
+    }
+
+    get roles(): RoleInterface[] {
+        return this._roles;
     }
 }
