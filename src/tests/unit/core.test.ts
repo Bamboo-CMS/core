@@ -1,17 +1,17 @@
 import {core} from "../../Core";
 import {Container} from "../../container/Container";
 import {
-    PackageHandler,
-    packageHandlerContainerName,
-    packageHandlerContainerTags
+    PluginHandler,
+    pluginHandlerContainerName,
+    pluginHandlerContainerTags
 } from '../..';
 
 describe('Core tests', () => {
     it('should instance the core correctly', async () => {
         expect(core.container).toBeInstanceOf(Container);
-        expect(core.container.get(packageHandlerContainerName)).toBeInstanceOf(PackageHandler);
-        expect(core.container.getByTags(packageHandlerContainerTags).length).toBe(1);
-        expect(core.container.getByTags(packageHandlerContainerTags)[0]).toBeInstanceOf(PackageHandler);
+        expect(core.container.get(pluginHandlerContainerName)).toBeInstanceOf(PluginHandler);
+        expect(core.container.getByTags(pluginHandlerContainerTags).length).toBe(1);
+        expect(core.container.getByTags(pluginHandlerContainerTags)[0]).toBeInstanceOf(PluginHandler);
     });
 
     it('should boot the core correctly', async () => {

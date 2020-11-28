@@ -3,13 +3,13 @@ import {PluginMock} from "../../mock/PluginMock";
 
 describe('Package handler tests', () => {
     it('should register a package', async () => {
-        const packageHandler = core.packageHandler;
+        const packageHandler = core.pluginHandler;
         const pluginMock = new PluginMock();
 
-        packageHandler.registerPackage(pluginMock, Symbol('test'));
+        packageHandler.registerPlugin(pluginMock, Symbol('test'));
 
-        expect(packageHandler.packages).toBeInstanceOf(Array);
-        expect(packageHandler.packages.length).toBe(1);
-        expect(packageHandler.packages[0]).toBe(pluginMock);
+        expect(packageHandler.plugins).toBeInstanceOf(Array);
+        expect(packageHandler.plugins.length).toBe(1);
+        expect(packageHandler.plugins[0]).toBe(pluginMock);
     });
 });

@@ -1,4 +1,3 @@
-import {Package} from "./Package";
 import {IResolvers, mergeSchemas} from 'graphql-tools';
 import {GraphQLSchema} from "graphql";
 import { core } from "../Core";
@@ -6,18 +5,19 @@ import merge from "lodash.merge";
 import { IExecutableSchemaDefinition, makeExecutableSchema } from '@graphql-tools/schema';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
 import { RoleInterface } from '../authorizationModule/RoleInterface';
+import { PluginInterface } from './PluginInterface';
 
-export const packageHandlerContainerName = Symbol('packageHandler');
-export const packageHandlerContainerTags: string[] = ['packageHandler'];
+export const pluginHandlerContainerName = Symbol('pluginHandler');
+export const pluginHandlerContainerTags: string[] = ['pluginHandler'];
 
 type PermissionMap = { [k: string]: PermissionInterface };
 
-export class PackageHandler {
+export class PluginHandler {
 
     /**
-     * The package tag is required to find all package entries.
+     * The package tag is required to find all plugin entries.
      */
-    private readonly defaultPackageContainerTag: string = 'package';
+    private readonly defaultPluginContainerTag: string = 'plugin';
 
     /**
      * The resolver tag is required to find all resolver entries.
@@ -29,49 +29,53 @@ export class PackageHandler {
      */
     private readonly defaultGraphQLSchemaContainerTag: string = 'graphQLSchema';
 
-    private _packagesInitialized: boolean = false;
+    private _pluginsInitialized: boolean = false;
 
     private _permissions: PermissionMap = {};
 
     private _roles: RoleInterface[] = [];
 
-    initializesPackages(): void {
-        if (this._packagesInitialized) {
+    initializesPlugins(): void {
+        if (this._pluginsInitialized) {
             return;
         }
 
         // Register each package.
-        for (let bambooPackage of this.packages) {
-            bambooPackage.register();
+        for (let bambooPlugin of this.plugins) {
+            for (let schema of bambooPlugin.schemas) {
+                this.addGraphQLSchemaDefinition(schema);
+            }
+
+            for (let resolver of bambooPlugin.resolvers) {
+                this.addResolver(resolver);
+            }
+
+            this.addRoles(bambooPlugin.roles);
+
+            this.addPermissions(bambooPlugin.permissions);
         }
 
         // Start each package.
-        for (let bambooPackage of this.packages) {
-            bambooPackage.start();
+        for (let bambooPlugin of this.plugins) {
+            bambooPlugin.start();
         }
 
-        this._packagesInitialized = true;
+        this._pluginsInitialized = true;
     }
 
-    registerPackage(bambooPackage: Package, name: Symbol, tags: string[] = []): void {
-        core.container.register(bambooPackage, name, [
+    registerPlugin(bambooPlugin: PluginInterface, name: Symbol, tags: string[] = []): void {
+        core.container.register(bambooPlugin, name, [
             ...tags,
-            this.defaultPackageContainerTag
+            this.defaultPluginContainerTag
         ]);
     }
 
-    addResolver(resolver: IResolvers, name: Symbol, tags: string[] = []): void {
-        core.container.register(resolver, name, [
-            ...tags,
-            ...[this.defaultResolverContainerTag]
-        ]);
+    private addResolver(resolver: IResolvers): void {
+        core.container.register(resolver, Symbol('resolver'), [this.defaultResolverContainerTag]);
     }
 
-    addGraphQLSchemaDefinition(graphQLSchemaDefinition: IExecutableSchemaDefinition, name: Symbol, tags: string[] = []): void {
-        core.container.register(makeExecutableSchema(graphQLSchemaDefinition), name, [
-            ...tags,
-            ...[this.defaultGraphQLSchemaContainerTag]
-        ]);
+    private addGraphQLSchemaDefinition(graphQLSchemaDefinition: IExecutableSchemaDefinition): void {
+        core.container.register(makeExecutableSchema(graphQLSchemaDefinition), Symbol('graphql-schema'), [this.defaultGraphQLSchemaContainerTag]);
     }
 
     private getResolverMap(): IResolvers | undefined {
@@ -86,10 +90,10 @@ export class PackageHandler {
         return mergeSchemas({
             schemas: this.graphQLSchemas,
             resolvers: this.getResolverMap()
-        })
+        });
     }
 
-    addPermissions(permissions: PermissionInterface[]) {
+    private addPermissions(permissions: PermissionInterface[]) {
         const pObject: PermissionMap = {};
         for (const p of permissions) {
             pObject[p.permission] = p;
@@ -101,8 +105,11 @@ export class PackageHandler {
         };
     }
 
-    addRole(role: RoleInterface) {
-        this._roles.push(role);
+    private addRoles(roles: RoleInterface[]) {
+        this._roles = [
+          ...this.roles,
+          ...roles
+        ];
     }
 
     get graphQLSchemas(): GraphQLSchema[] {
@@ -113,8 +120,8 @@ export class PackageHandler {
         return core.container.getByTags([this.defaultResolverContainerTag]);
     }
 
-    get packages(): Package[] {
-        return core.container.getByTags([this.defaultPackageContainerTag]);
+    get plugins(): PluginInterface[] {
+        return core.container.getByTags([this.defaultPluginContainerTag]);
     }
 
     get permissions(): PermissionInterface[] {

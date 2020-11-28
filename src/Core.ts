@@ -1,5 +1,5 @@
 import {Container} from "./container/Container";
-import {packageHandlerContainerTags, packageHandlerContainerName, PackageHandler} from "./packageModule/PackageHandler";
+import {pluginHandlerContainerTags, pluginHandlerContainerName, PluginHandler} from "./packageModule/PluginHandler";
 
 export class Core {
     private readonly _container: Container;
@@ -9,7 +9,7 @@ export class Core {
         this._container = container;
 
         // Register core required handlers.
-        this.container.register(new PackageHandler(), packageHandlerContainerName, packageHandlerContainerTags);
+        this.container.register(new PluginHandler(), pluginHandlerContainerName, pluginHandlerContainerTags);
     }
 
     boot(): boolean {
@@ -18,8 +18,7 @@ export class Core {
         }
 
         // Initialize registered packages.
-        this.packageHandler.initializesPackages();
-        this.packageHandler.addGraphQLSchemaDefinition({  })
+        this.pluginHandler.initializesPlugins();
 
         this._booted = true;
 
@@ -30,8 +29,8 @@ export class Core {
         return this._container;
     }
 
-    get packageHandler(): PackageHandler {
-        return this._container.get<PackageHandler>(packageHandlerContainerName) as PackageHandler;
+    get pluginHandler(): PluginHandler {
+        return this._container.get<PluginHandler>(pluginHandlerContainerName) as PluginHandler;
     }
 }
 

@@ -1,4 +1,4 @@
-import {PackageHandler} from "../../../packageModule/PackageHandler";
+import {PluginHandler} from "../../../packageModule/PluginHandler";
 import {IResolvers} from "graphql-tools";
 
 describe('Resolver tests', () => {
@@ -29,7 +29,7 @@ describe('Resolver tests', () => {
             }
         };
 
-        const packageHandler = new PackageHandler();
+        const packageHandler = new PluginHandler();
 
         // Test if there is an empty result.
         expect(packageHandler.getMergedSchema() === null).toBeTruthy();
