@@ -1,6 +1,6 @@
-import {Model, Schema} from "mongoose";
+import {Model, Schema, Document} from "mongoose";
 
 export interface MongooseEntityInterface  {
     getSchema(): Schema;
-    getModel(): Model<any>;
+    getModel<T extends Document>(): Model<T>;
 }

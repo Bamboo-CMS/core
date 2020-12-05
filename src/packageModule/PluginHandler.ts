@@ -1,8 +1,8 @@
-import {IResolvers, mergeSchemas} from 'graphql-tools';
-import {GraphQLSchema} from "graphql";
+import { IResolvers } from 'graphql-tools';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge'
+import { DocumentNode, GraphQLSchema } from 'graphql';
 import { core } from "../Core";
-import merge from "lodash.merge";
-import { IExecutableSchemaDefinition, makeExecutableSchema } from '@graphql-tools/schema';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
 import { RoleInterface } from '../authorizationModule/RoleInterface';
 import { PluginInterface } from './PluginInterface';
@@ -74,8 +74,8 @@ export class PluginHandler {
         core.container.register(resolver, Symbol('resolver'), [this.defaultResolverContainerTag]);
     }
 
-    private addGraphQLSchemaDefinition(graphQLSchemaDefinition: IExecutableSchemaDefinition): void {
-        core.container.register(makeExecutableSchema(graphQLSchemaDefinition), Symbol('graphql-schema'), [this.defaultGraphQLSchemaContainerTag]);
+    private addGraphQLSchemaDefinition(typeDef: DocumentNode): void {
+        core.container.register(typeDef, Symbol('graphql-schema'), [this.defaultGraphQLSchemaContainerTag]);
     }
 
     private getResolverMap(): IResolvers | undefined {
@@ -83,12 +83,12 @@ export class PluginHandler {
             return undefined;
         }
 
-        return this.resolvers.reduce((curr, resolver) => merge(curr, resolver), {});
+        return mergeResolvers(this.resolvers);
     }
 
     getMergedSchema(): GraphQLSchema {
-        return mergeSchemas({
-            schemas: this.graphQLSchemas,
+        return makeExecutableSchema({
+            typeDefs: mergeTypeDefs(this.graphQLSchemas),
             resolvers: this.getResolverMap()
         });
     }
@@ -112,7 +112,7 @@ export class PluginHandler {
         ];
     }
 
-    get graphQLSchemas(): GraphQLSchema[] {
+    get graphQLSchemas(): DocumentNode[] {
         return core.container.getByTags([this.defaultGraphQLSchemaContainerTag]);
     }
 

@@ -1,12 +1,12 @@
 import { IResolvers } from 'graphql-tools';
 import { RoleInterface } from '../authorizationModule/RoleInterface';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
-import { IExecutableSchemaDefinition } from '@graphql-tools/schema';
+import { DocumentNode } from 'graphql';
 
 export interface PluginInterface {
   readonly resolvers: IResolvers[];
 
-  readonly schemas: IExecutableSchemaDefinition[];
+  readonly schemas: DocumentNode[];
 
   readonly roles: RoleInterface[];
 
