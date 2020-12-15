@@ -3,6 +3,7 @@ import { IResolvers } from 'graphql-tools';
 import { RoleInterface } from '../authorizationModule/RoleInterface';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
 import { DocumentNode } from 'graphql';
+import {ModelDefinition} from "../mongooseModule/ModelDefinition";
 
 export abstract class BasePlugin implements PluginInterface {
   abstract readonly resolvers: IResolvers[];
@@ -13,6 +14,10 @@ export abstract class BasePlugin implements PluginInterface {
   }
 
   get permissions(): PermissionInterface[] {
+    return [];
+  }
+
+  get modelDefinitions(): ModelDefinition[] {
     return [];
   }
 

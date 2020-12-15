@@ -1,13 +1,13 @@
-import { IResolvers } from 'graphql-tools';
-import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge'
-import { DocumentNode, GraphQLSchema } from 'graphql';
-import { core } from "../Core";
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import {IResolvers} from 'graphql-tools';
+import {mergeTypeDefs, mergeResolvers} from '@graphql-tools/merge'
+import {DocumentNode, GraphQLSchema} from 'graphql';
+import {core} from '../Core';
+import {makeExecutableSchema} from '@graphql-tools/schema';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
-import { RoleInterface } from '../authorizationModule/RoleInterface';
-import { PluginInterface } from './PluginInterface';
+import {RoleInterface} from '../authorizationModule/RoleInterface';
+import {PluginInterface} from './PluginInterface';
 
-export const pluginHandlerContainerName = Symbol('pluginHandler');
+export const pluginHandlerContainerName = 'pluginHandler';
 export const pluginHandlerContainerTags: string[] = ['pluginHandler'];
 
 type PermissionMap = { [k: string]: PermissionInterface };
@@ -63,7 +63,7 @@ export class PluginHandler {
         this._pluginsInitialized = true;
     }
 
-    registerPlugin(bambooPlugin: PluginInterface, name: Symbol, tags: string[] = []): void {
+    registerPlugin(bambooPlugin: PluginInterface, name: string, tags: string[] = []): void {
         core.container.register(bambooPlugin, name, [
             ...tags,
             this.defaultPluginContainerTag
@@ -71,11 +71,11 @@ export class PluginHandler {
     }
 
     private addResolver(resolver: IResolvers): void {
-        core.container.register(resolver, Symbol('resolver'), [this.defaultResolverContainerTag]);
+        core.container.register(resolver, 'resolver', [this.defaultResolverContainerTag]);
     }
 
     private addGraphQLSchemaDefinition(typeDef: DocumentNode): void {
-        core.container.register(typeDef, Symbol('graphql-schema'), [this.defaultGraphQLSchemaContainerTag]);
+        core.container.register(typeDef, 'graphql-schema', [this.defaultGraphQLSchemaContainerTag]);
     }
 
     private getResolverMap(): IResolvers | undefined {
@@ -107,8 +107,8 @@ export class PluginHandler {
 
     private addRoles(roles: RoleInterface[]) {
         this._roles = [
-          ...this.roles,
-          ...roles
+            ...this.roles,
+            ...roles
         ];
     }
 

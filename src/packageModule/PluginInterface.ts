@@ -2,6 +2,7 @@ import { IResolvers } from 'graphql-tools';
 import { RoleInterface } from '../authorizationModule/RoleInterface';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
 import { DocumentNode } from 'graphql';
+import {ModelDefinition} from "../mongooseModule/ModelDefinition";
 
 export interface PluginInterface {
   readonly resolvers: IResolvers[];
@@ -11,6 +12,8 @@ export interface PluginInterface {
   readonly roles: RoleInterface[];
 
   readonly permissions: PermissionInterface[];
+
+  readonly modelDefinitions: ModelDefinition[];
 
   /**
    * Function the core trigger if anything is registered.
