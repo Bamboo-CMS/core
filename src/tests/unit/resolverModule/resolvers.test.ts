@@ -1,5 +1,7 @@
-import {PluginHandler} from '../../../packageModule/PluginHandler';
-import {IResolvers} from 'graphql-tools';
+import gql from 'graphql-tag';
+import {IResolvers} from '@graphql-tools/utils';
+import {BasePlugin} from '../../../packageModule/BasePlugin';
+import {core} from '../../../Core';
 
 describe('Resolver tests', () => {
   it('should register an observer', async () => {
@@ -29,16 +31,31 @@ describe('Resolver tests', () => {
       }
     };
 
-    const packageHandler = new PluginHandler();
+    const pluginHandler = core.pluginHandler;
 
     // Test if there is an empty result.
-    expect(packageHandler.getMergedSchema() === null).toBeTruthy();
+    expect(pluginHandler.getMergedSchema().getQueryType() === undefined).toBeTruthy();
 
-    // Register all resolvers.
-    packageHandler.addResolver(firstResolverMock, Symbol());
-    packageHandler.addResolver(secondResolverMock, Symbol());
+    const testPluginInstance = new (class extends BasePlugin {
+      readonly resolvers = [firstResolverMock, secondResolverMock];
+      readonly schemas = [
+        gql`
+          type Query {
+            firstQueryMock: String
+            secondQueryMock: String
+          }
+          type Mutation {
+            firstMutationMock: String
+            secondMutationMock: String
+          }
+        `
+      ];
+    })();
 
-    const resolverMap = packageHandler.getMergedSchema();
+    pluginHandler.registerPlugin(testPluginInstance, 'testPlugin');
+    pluginHandler.initializesPlugins();
+
+    const resolverMap = pluginHandler.getMergedSchema();
 
     // Test if the two resolvers are merged.
     expect(typeof resolverMap).toBe('object');

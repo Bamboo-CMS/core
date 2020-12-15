@@ -6,7 +6,7 @@ describe('Package handler tests', () => {
     const packageHandler = core.pluginHandler;
     const pluginMock = new PluginMock();
 
-    packageHandler.registerPlugin(pluginMock, Symbol('test'));
+    packageHandler.registerPlugin(pluginMock, 'test');
 
     expect(packageHandler.plugins).toBeInstanceOf(Array);
     expect(packageHandler.plugins.length).toBe(1);

@@ -5,12 +5,11 @@ describe('Container tests', () => {
     class TestObject {}
 
     const container = new Container();
-    const testName = Symbol('test');
     const testTag = 'test';
 
-    container.register(new TestObject(), testName, [testTag]);
+    container.register(new TestObject(), 'test', [testTag]);
 
-    expect(container.get(testName)).toBeInstanceOf(TestObject);
+    expect(container.get('test')).toBeInstanceOf(TestObject);
     expect(container.getByTags([testTag]).length).toBe(1);
     expect(container.getByTags([testTag])[0]).toBeInstanceOf(TestObject);
   });
@@ -19,8 +18,8 @@ describe('Container tests', () => {
     class TestObject {}
 
     const container = new Container();
-    const testName1 = Symbol('test');
-    const testName2 = Symbol('test');
+    const testName1 = 'test1';
+    const testName2 = 'test2';
     const testTag = 'test';
 
     container.register(new TestObject(), testName1, [testTag]);
@@ -39,7 +38,7 @@ describe('Container tests', () => {
     class TestObject2 {}
 
     const container = new Container();
-    const testName = Symbol('test');
+    const testName = 'test';
     const testTag = 'test';
 
     container.register(new TestObject1(), testName, [testTag]);

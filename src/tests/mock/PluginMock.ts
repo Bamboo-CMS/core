@@ -1,7 +1,6 @@
-import {Package} from '../../packageModule/Package';
+import {BasePlugin} from '../../packageModule/BasePlugin';
 
-export class PluginMock extends Package {
-  register(): void {}
-
-  start(): void {}
+export class PluginMock extends BasePlugin {
+  readonly resolvers = [];
+  readonly schemas = [];
 }

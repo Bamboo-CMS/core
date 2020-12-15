@@ -5,7 +5,7 @@ describe('Container item tests', () => {
     class TestObjectClass {}
 
     const testObject = new TestObjectClass();
-    const testName = Symbol('test');
+    const testName = 'test';
     const testTag = 'test';
 
     const containerItem = new ContainerItem(testObject, testName, [testTag]);
