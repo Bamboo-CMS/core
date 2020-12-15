@@ -14,5 +14,7 @@ module.exports = {
     'plugin:prettier/recommended'
   ],
   // add your custom rules here
-  rules: {}
+  rules: {
+    '@typescript-eslint/no-empty-function': 'off'
+  }
 };

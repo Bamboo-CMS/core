@@ -16,6 +16,5 @@ export abstract class BasePlugin implements PluginInterface {
     return [];
   }
 
-  start(): void {
-  }
+  start(): void {}
 }

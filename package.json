@@ -9,9 +9,9 @@
     "prepublish": "npm run build",
     "dev": "tsc-watch -d",
     "test": "jest",
-    "lint:js": "eslint --ext .ts --ignore-path .gitignore .",
-    "lint:js:fix": "eslint --fix --ext .ts --ignore-path .gitignore .",
-    "lint": "npm run lint:js"
+    "lint:ts": "eslint --ext .ts --ignore-path .gitignore .",
+    "lint:ts:fix": "eslint --fix --ext .ts --ignore-path .gitignore .",
+    "lint": "npm run lint:ts"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +27,7 @@
     "url": "git+ssh://git@github.com/Bamboo-CMS/core.git"
   },
   "lint-staged": {
-    "*.ts": "eslint"
+    "*.ts": "lint:ts"
   },
   "husky": {
     "hooks": {
