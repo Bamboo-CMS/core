@@ -27,7 +27,7 @@
     "graphql-tools": "^6.0.18"
   },
   "devDependencies": {
-    "@graphql-tools/schema": "^6.0.18",
+    "@graphql-tools/schema": "^7.1.2",
     "@types/graphql": "14.0.7",
     "@types/jest": "^26.0.4",
     "@types/lodash.merge": "^4.6.6",
