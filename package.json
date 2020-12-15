@@ -7,7 +7,8 @@
   "scripts": {
     "build": "tsc -d",
     "prepublish": "npm run build",
-    "dev": "tsc-watch -d"
+    "dev": "tsc-watch -d",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
