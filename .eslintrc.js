@@ -15,6 +15,7 @@ module.exports = {
   ],
   // add your custom rules here
   rules: {
-    '@typescript-eslint/no-empty-function': 'off'
+    '@typescript-eslint/no-empty-function': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off'
   }
 };

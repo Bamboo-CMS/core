@@ -1,2 +1,2 @@
 export * from './Core';
-export * from './packageModule/PluginHandler'
+export * from './packageModule/PluginHandler';

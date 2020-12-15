@@ -1,11 +1,11 @@
-import {IResolvers} from '@graphql-tools/utils';
-import {mergeTypeDefs, mergeResolvers} from '@graphql-tools/merge'
-import {DocumentNode, GraphQLSchema} from 'graphql';
-import {core} from '../Core';
-import {makeExecutableSchema} from '@graphql-tools/schema';
+import { IResolvers } from '@graphql-tools/utils';
+import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
+import { DocumentNode, GraphQLSchema } from 'graphql';
+import { core } from '../Core';
+import { makeExecutableSchema } from '@graphql-tools/schema';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
-import {RoleInterface} from '../authorizationModule/RoleInterface';
-import {PluginInterface} from './PluginInterface';
+import { RoleInterface } from '../authorizationModule/RoleInterface';
+import { PluginInterface } from './PluginInterface';
 
 export const pluginHandlerContainerName = 'pluginHandler';
 export const pluginHandlerContainerTags: string[] = ['pluginHandler'];
@@ -13,126 +13,124 @@ export const pluginHandlerContainerTags: string[] = ['pluginHandler'];
 type PermissionMap = { [k: string]: PermissionInterface };
 
 export class PluginHandler {
+  /**
+   * The package tag is required to find all plugin entries.
+   */
+  private readonly defaultPluginContainerTag: string = 'plugin';
 
-    /**
-     * The package tag is required to find all plugin entries.
-     */
-    private readonly defaultPluginContainerTag: string = 'plugin';
+  /**
+   * The resolver tag is required to find all resolver entries.
+   */
+  private readonly defaultResolverContainerTag: string = 'resolver';
 
-    /**
-     * The resolver tag is required to find all resolver entries.
-     */
-    private readonly defaultResolverContainerTag: string = 'resolver';
+  /**
+   * The graphql tag is required to find all graphql schemas entries.
+   */
+  private readonly defaultGraphQLSchemaContainerTag: string = 'graphQLSchema';
 
-    /**
-     * The graphql tag is required to find all graphql schemas entries.
-     */
-    private readonly defaultGraphQLSchemaContainerTag: string = 'graphQLSchema';
+  private _pluginsInitialized = false;
 
-    private _pluginsInitialized: boolean = false;
+  private _permissions: PermissionMap = {};
 
-    private _permissions: PermissionMap = {};
+  private _roles: RoleInterface[] = [];
 
-    private _roles: RoleInterface[] = [];
-
-    initializesPlugins(): void {
-        if (this._pluginsInitialized) {
-            return;
-        }
-
-        // Register each package.
-        for (let bambooPlugin of this.plugins) {
-            for (let schema of bambooPlugin.schemas) {
-                this.addGraphQLSchemaDefinition(schema);
-            }
-
-            for (let resolver of bambooPlugin.resolvers) {
-                this.addResolver(resolver);
-            }
-
-            this.addRoles(bambooPlugin.roles);
-
-            this.addPermissions(bambooPlugin.permissions);
-        }
-
-        // Start each package.
-        for (let bambooPlugin of this.plugins) {
-            bambooPlugin.start();
-        }
-
-        this._pluginsInitialized = true;
+  initializesPlugins(): void {
+    if (this._pluginsInitialized) {
+      return;
     }
 
-    registerPlugin(bambooPlugin: PluginInterface, name: string, tags: string[] = []): void {
-        core.container.register(bambooPlugin, name, [
-            ...tags,
-            this.defaultPluginContainerTag
-        ]);
+    // Register each package.
+    for (const bambooPlugin of this.plugins) {
+      for (const schema of bambooPlugin.schemas) {
+        this.addGraphQLSchemaDefinition(schema);
+      }
+
+      for (const resolver of bambooPlugin.resolvers) {
+        this.addResolver(resolver);
+      }
+
+      this.addRoles(bambooPlugin.roles);
+
+      this.addPermissions(bambooPlugin.permissions);
     }
 
-    private addResolver(resolver: IResolvers): void {
-        core.container.register(resolver, 'resolver', [this.defaultResolverContainerTag]);
+    // Start each package.
+    for (const bambooPlugin of this.plugins) {
+      bambooPlugin.start();
     }
 
-    private addGraphQLSchemaDefinition(typeDef: DocumentNode): void {
-        core.container.register(typeDef, 'graphql-schema', [this.defaultGraphQLSchemaContainerTag]);
+    this._pluginsInitialized = true;
+  }
+
+  registerPlugin(bambooPlugin: PluginInterface, name: string, tags: string[] = []): void {
+    core.container.register(bambooPlugin, name, [
+      ...tags,
+      this.defaultPluginContainerTag
+    ]);
+  }
+
+  private addResolver(resolver: IResolvers): void {
+    core.container.register(resolver, 'resolver', [this.defaultResolverContainerTag]);
+  }
+
+  private addGraphQLSchemaDefinition(typeDef: DocumentNode): void {
+    core.container.register(typeDef, 'graphql-schema', [
+      this.defaultGraphQLSchemaContainerTag
+    ]);
+  }
+
+  private getResolverMap(): IResolvers | undefined {
+    if (this.resolvers.length <= 0) {
+      return undefined;
     }
 
-    private getResolverMap(): IResolvers | undefined {
-        if (this.resolvers.length <= 0) {
-            return undefined;
-        }
+    return mergeResolvers(this.resolvers);
+  }
 
-        return mergeResolvers(this.resolvers);
+  getMergedSchema(): GraphQLSchema {
+    return makeExecutableSchema({
+      typeDefs: mergeTypeDefs(this.graphQLSchemas),
+      resolvers: this.getResolverMap()
+    });
+  }
+
+  private addPermissions(permissions: PermissionInterface[]) {
+    const pObject: PermissionMap = {};
+    for (const p of permissions) {
+      pObject[p.permission] = p;
     }
 
-    getMergedSchema(): GraphQLSchema {
-        return makeExecutableSchema({
-            typeDefs: mergeTypeDefs(this.graphQLSchemas),
-            resolvers: this.getResolverMap()
-        });
-    }
+    this._permissions = {
+      ...this._permissions,
+      ...pObject
+    };
+  }
 
-    private addPermissions(permissions: PermissionInterface[]) {
-        const pObject: PermissionMap = {};
-        for (const p of permissions) {
-            pObject[p.permission] = p;
-        }
+  private addRoles(roles: RoleInterface[]) {
+    this._roles = [...this.roles, ...roles];
+  }
 
-        this._permissions = {
-            ...this._permissions,
-            ...pObject
-        };
-    }
+  get graphQLSchemas(): DocumentNode[] {
+    return core.container.getByTags([this.defaultGraphQLSchemaContainerTag]);
+  }
 
-    private addRoles(roles: RoleInterface[]) {
-        this._roles = [
-            ...this.roles,
-            ...roles
-        ];
-    }
+  get resolvers(): IResolvers[] {
+    return core.container.getByTags([this.defaultResolverContainerTag]);
+  }
 
-    get graphQLSchemas(): DocumentNode[] {
-        return core.container.getByTags([this.defaultGraphQLSchemaContainerTag]);
-    }
+  get plugins(): PluginInterface[] {
+    return core.container.getByTags([this.defaultPluginContainerTag]);
+  }
 
-    get resolvers(): IResolvers[] {
-        return core.container.getByTags([this.defaultResolverContainerTag]);
-    }
+  get permissions(): PermissionInterface[] {
+    return Object.values(this._permissions);
+  }
 
-    get plugins(): PluginInterface[] {
-        return core.container.getByTags([this.defaultPluginContainerTag]);
-    }
+  getPermissionByName(permission: string): PermissionInterface | null {
+    return this._permissions[permission] || null;
+  }
 
-    get permissions(): PermissionInterface[] {
-        return Object.values(this._permissions);
-    }
-
-    getPermissionByName(permission: string): PermissionInterface | null {
-        return this._permissions[permission] || null;
-    }
-
-    get roles(): RoleInterface[] {
-        return this._roles;
-    }
+  get roles(): RoleInterface[] {
+    return this._roles;
+  }
 }
