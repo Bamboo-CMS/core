@@ -13,8 +13,7 @@
     "lint:ts:fix": "eslint --fix --ext .ts --ignore-path .gitignore .",
     "lint": "npm run lint:ts"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": ["bamboo", "cms", "mongoose", "graphql"],
   "license": "MIT",
   "engines": {
     "node": "14"
@@ -27,12 +26,12 @@
     "url": "git+ssh://git@github.com/Bamboo-CMS/core.git"
   },
   "lint-staged": {
-    "*.ts": "lint:ts"
+    "*.ts": "npm run lint:ts"
   },
   "husky": {
     "hooks": {
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged && yalc check"
+      "pre-commit": "lint-staged"
     }
   },
   "peerDependencies": {
