@@ -1,5 +1,5 @@
-import { PluginHandler } from '../../../packageModule/PluginHandler';
-import { IResolvers } from 'graphql-tools';
+import {PluginHandler} from '../../../packageModule/PluginHandler';
+import {IResolvers} from 'graphql-tools';
 
 describe('Resolver tests', () => {
   it('should register an observer', async () => {

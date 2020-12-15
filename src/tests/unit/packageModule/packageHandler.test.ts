@@ -1,5 +1,5 @@
-import { core } from '../../../Core';
-import { PluginMock } from '../../mock/PluginMock';
+import {core} from '../../../Core';
+import {PluginMock} from '../../mock/PluginMock';
 
 describe('Package handler tests', () => {
   it('should register a package', async () => {

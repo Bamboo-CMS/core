@@ -1,4 +1,4 @@
-import { Package } from '../../packageModule/Package';
+import {Package} from '../../packageModule/Package';
 
 export class PluginMock extends Package {
   register(): void {}

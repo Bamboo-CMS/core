@@ -1,4 +1,4 @@
-import { ContainerItem } from './ContainerItem';
+import {ContainerItem} from './ContainerItem';
 
 export class Container {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

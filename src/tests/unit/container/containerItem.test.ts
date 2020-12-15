@@ -1,4 +1,4 @@
-import { ContainerItem } from '../../../container/ContainerItem';
+import {ContainerItem} from '../../../container/ContainerItem';
 
 describe('Container item tests', () => {
   it('should create a container item and return the right values', async () => {

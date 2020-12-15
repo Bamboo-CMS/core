@@ -1,4 +1,4 @@
-import { RoleInterface } from './RoleInterface';
+import {RoleInterface} from './RoleInterface';
 import PermissionInterface from './PermissionInterface';
 
 export class Role implements RoleInterface {

@@ -1,5 +1,5 @@
-import { core } from '../../Core';
-import { Container } from '../../container/Container';
+import {core} from '../../Core';
+import {Container} from '../../container/Container';
 import {
   PluginHandler,
   pluginHandlerContainerName,

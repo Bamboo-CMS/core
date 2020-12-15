@@ -1,16 +1,16 @@
-import { IResolvers } from '@graphql-tools/utils';
-import { mergeTypeDefs, mergeResolvers } from '@graphql-tools/merge';
-import { DocumentNode, GraphQLSchema } from 'graphql';
-import { core } from '../Core';
-import { makeExecutableSchema } from '@graphql-tools/schema';
+import {IResolvers} from '@graphql-tools/utils';
+import {mergeTypeDefs, mergeResolvers} from '@graphql-tools/merge';
+import {DocumentNode, GraphQLSchema} from 'graphql';
+import {core} from '../Core';
+import {makeExecutableSchema} from '@graphql-tools/schema';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
-import { RoleInterface } from '../authorizationModule/RoleInterface';
-import { PluginInterface } from './PluginInterface';
+import {RoleInterface} from '../authorizationModule/RoleInterface';
+import {PluginInterface} from './PluginInterface';
 
 export const pluginHandlerContainerName = 'pluginHandler';
 export const pluginHandlerContainerTags: string[] = ['pluginHandler'];
 
-type PermissionMap = { [k: string]: PermissionInterface };
+type PermissionMap = {[k: string]: PermissionInterface};
 
 export class PluginHandler {
   /**

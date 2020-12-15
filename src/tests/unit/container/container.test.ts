@@ -1,4 +1,4 @@
-import { Container } from '../../../container/Container';
+import {Container} from '../../../container/Container';
 
 describe('Container tests', () => {
   it('should register an object and return it', async () => {
