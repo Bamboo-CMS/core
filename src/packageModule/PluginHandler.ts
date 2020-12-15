@@ -1,4 +1,4 @@
-import {IResolvers} from 'graphql-tools';
+import {IResolvers} from '@graphql-tools/utils';
 import {mergeTypeDefs, mergeResolvers} from '@graphql-tools/merge'
 import {DocumentNode, GraphQLSchema} from 'graphql';
 import {core} from '../Core';

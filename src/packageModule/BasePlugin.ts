@@ -1,5 +1,5 @@
 import { PluginInterface } from './PluginInterface';
-import { IResolvers } from 'graphql-tools';
+import { IResolvers } from '@graphql-tools/utils';
 import { RoleInterface } from '../authorizationModule/RoleInterface';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
 import { DocumentNode } from 'graphql';
@@ -21,6 +21,5 @@ export abstract class BasePlugin implements PluginInterface {
     return [];
   }
 
-  start(): void {
-  }
+  start(): void {}
 }
