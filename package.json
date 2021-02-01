@@ -46,7 +46,7 @@
   "dependencies": {
     "@graphql-tools/merge": "^6.2.7",
     "@graphql-tools/schema": "^7.1.2",
-    "@graphql-tools/utils": "^7.2.4"
+    "@graphql-tools/utils": "^7.2.5"
   },
   "devDependencies": {
     "mongoose": "^5.11.14",
