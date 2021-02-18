@@ -23,11 +23,6 @@ export class PluginHandler {
    */
   private readonly defaultResolverContainerTag: string = 'resolver';
 
-  /**
-   * The graphql tag is required to find all graphql schemas entries.
-   */
-  private readonly defaultGraphQLSchemaContainerTag: string = 'graphQLSchema';
-
   private _pluginsInitialized = false;
 
   private _permissions: PermissionMap = {};
@@ -41,10 +36,6 @@ export class PluginHandler {
 
     // Register each package.
     for (const bambooPlugin of this.plugins) {
-      for (const schema of bambooPlugin.schemas) {
-        this.addGraphQLSchemaDefinition(schema);
-      }
-
       for (const resolver of bambooPlugin.resolvers) {
         this.addResolver(resolver);
       }
@@ -71,12 +62,6 @@ export class PluginHandler {
 
   private addResolver(resolver: IResolvers): void {
     core.container.register(resolver, 'resolver', [this.defaultResolverContainerTag]);
-  }
-
-  private addGraphQLSchemaDefinition(typeDef: DocumentNode): void {
-    core.container.register(typeDef, 'graphql-schema', [
-      this.defaultGraphQLSchemaContainerTag
-    ]);
   }
 
   private getResolverMap(): IResolvers | undefined {
@@ -111,7 +96,13 @@ export class PluginHandler {
   }
 
   get graphQLSchemas(): DocumentNode[] {
-    return core.container.getByTags([this.defaultGraphQLSchemaContainerTag]);
+    let schemas: DocumentNode[] = [];
+
+    for (const plugin of this.plugins) {
+      schemas = [...schemas, ...plugin.schemas];
+    }
+
+    return schemas;
   }
 
   get resolvers(): IResolvers[] {
