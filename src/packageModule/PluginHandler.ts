@@ -36,10 +36,6 @@ export class PluginHandler {
 
     // Register each package.
     for (const bambooPlugin of this.plugins) {
-      for (const resolver of bambooPlugin.resolvers) {
-        this.addResolver(resolver);
-      }
-
       this.addRoles(bambooPlugin.roles);
 
       this.addPermissions(bambooPlugin.permissions);
@@ -58,10 +54,6 @@ export class PluginHandler {
       ...tags,
       this.defaultPluginContainerTag
     ]);
-  }
-
-  private addResolver(resolver: IResolvers): void {
-    core.container.register(resolver, 'resolver', [this.defaultResolverContainerTag]);
   }
 
   private getResolverMap(): IResolvers | undefined {
@@ -106,7 +98,13 @@ export class PluginHandler {
   }
 
   get resolvers(): IResolvers[] {
-    return core.container.getByTags([this.defaultResolverContainerTag]);
+    let resolvers: IResolvers[] = [];
+
+    for (const plugin of this.plugins) {
+      resolvers = [...resolvers, ...plugin.resolvers];
+    }
+
+    return resolvers;
   }
 
   get plugins(): PluginInterface[] {
