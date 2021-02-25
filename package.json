@@ -68,7 +68,7 @@
     "ncp": "2.0.0",
     "prettier": "^2.2.1",
     "ts-jest": "^26.5.2",
-    "ts-node-dev": "^1.1.1",
+    "ts-node-dev": "^1.1.2",
     "tsc-watch": "^4.2.9",
     "tslint": "^6.1.2",
     "typescript": "^4.2.2"
