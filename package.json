@@ -20,6 +20,7 @@
     "graphql"
   ],
   "license": "MIT",
+  "engineStrict": true,
   "engines": {
     "node": "14"
   },

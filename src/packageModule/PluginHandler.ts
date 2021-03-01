@@ -1,4 +1,4 @@
-import {IResolvers} from '@graphql-tools/utils';
+import {IDirectiveResolvers, IResolvers} from '@graphql-tools/utils';
 import {mergeTypeDefs, mergeResolvers} from '@graphql-tools/merge';
 import {DocumentNode, GraphQLSchema} from 'graphql';
 import {core} from '../Core';
@@ -67,7 +67,8 @@ export class PluginHandler {
   getMergedSchema(): GraphQLSchema {
     return makeExecutableSchema({
       typeDefs: mergeTypeDefs(this.graphQLSchemas),
-      resolvers: this.getResolverMap()
+      resolvers: this.getResolverMap(),
+      directiveResolvers: this.graphQLDirectives
     });
   }
 
@@ -85,6 +86,21 @@ export class PluginHandler {
 
   private addRoles(roles: RoleInterface[]) {
     this._roles = [...this.roles, ...roles];
+  }
+
+  get graphQLDirectives(): IDirectiveResolvers {
+    let directiveResolvers: IDirectiveResolvers = {};
+
+    for (const plugin of this.plugins) {
+      if (plugin.directiveResolvers) {
+        directiveResolvers = {
+          ...directiveResolvers,
+          ...plugin.directiveResolvers
+        };
+      }
+    }
+
+    return directiveResolvers;
   }
 
   get graphQLSchemas(): DocumentNode[] {

@@ -1,4 +1,4 @@
-import {IResolvers} from '@graphql-tools/utils';
+import {IDirectiveResolvers, IResolvers} from '@graphql-tools/utils';
 import {RoleInterface} from '../authorizationModule/RoleInterface';
 import PermissionInterface from '../authorizationModule/PermissionInterface';
 import {DocumentNode} from 'graphql';
@@ -14,6 +14,8 @@ export interface PluginInterface {
   readonly permissions: PermissionInterface[];
 
   readonly modelDefinitions: ModelDefinition[];
+
+  readonly directiveResolvers?: IDirectiveResolvers;
 
   /**
    * Function the core trigger if anything is registered.
