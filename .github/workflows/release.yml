@@ -30,7 +30,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Conventional Changelog Action
+      - name: Install dependencies 👨🏻‍💻
+        run: npm ci
+
+      - name: conventional-changelog
         uses: TriPSs/conventional-changelog-action@v3
         with:
           github-token: ${{ secrets.github_token }}
@@ -38,7 +41,8 @@ jobs:
 
       - name: Release NPM package
         uses: JS-DevTools/npm-publish@v1
+        if: ${{ !steps.conventional-changelog.outputs.skipped }}
         with:
           registry: https://npm.pkg.github.com/
-          tag: ${{ env.version }}
+          tag: ${{ steps.conventional-changelog.outputs.version }}
           token: ${{ secrets.NPM_ACTION_TOKEN }}
