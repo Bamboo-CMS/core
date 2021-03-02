@@ -39,9 +39,20 @@ jobs:
           github-token: ${{ secrets.github_token }}
           tag-prefix: ''
 
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        if: ${{ steps.conventional-changelog.outputs.skipped == 'false' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.github_token }}
+        with:
+          tag_name: ${{ steps.conventional-changelog.outputs.tag }}
+          release_name: ${{ steps.conventional-changelog.outputs.tag }}
+          body: ${{ steps.conventional-changelog.outputs.clean_changelog }}
+
       - name: Release NPM package
         uses: JS-DevTools/npm-publish@v1
-        if: ${{ !steps.conventional-changelog.outputs.skipped }}
+        if: ${{ steps.conventional-changelog.outputs.skipped == 'false' }}
         with:
           registry: https://npm.pkg.github.com/
           tag: ${{ steps.conventional-changelog.outputs.version }}
