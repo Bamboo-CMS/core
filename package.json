@@ -51,7 +51,7 @@
   },
   "devDependencies": {
     "mongoose": "^5.12.2",
-    "@commitlint/cli": "^12.0.1",
+    "@commitlint/cli": "^12.1.1",
     "@commitlint/config-conventional": "^12.0.1",
     "@types/graphql": "14.5.0",
     "@types/jest": "^26.0.21",
