@@ -51,7 +51,7 @@ jobs:
           body: ${{ steps.conventional-changelog.outputs.clean_changelog }}
 
       - name: Release NPM package
-        uses: JS-DevTools/npm-publish@v1
+        uses: JS-DevTools/npm-publish@v1.4.3
         if: ${{ steps.conventional-changelog.outputs.skipped == 'false' }}
         with:
           registry: https://npm.pkg.github.com/
